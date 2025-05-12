@@ -1,5 +1,6 @@
 package com.softwaremobi.gerenciamentodevoos.Controllers;
 
+import com.softwaremobi.gerenciamentodevoos.Enum.StatusVooEnum;
 import com.softwaremobi.gerenciamentodevoos.Models.VooModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.softwaremobi.gerenciamentodevoos.services.VooService;
@@ -22,9 +23,9 @@ public class VooController {
     public VooModel createVoo(@RequestBody VooModel voo) {
         return vooService.createVoo(voo);
     }
-    @PutMapping(value = "/updateStatus/{Status}", consumes= MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
-    public VooModel updateVoo(@PathVariable String Status) {
-        return vooService.updateStatusVoo(Status);
+    @PutMapping(value = "/updateStatus/{id}/{status}", consumes= MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+    public VooModel updateVoo(@PathVariable StatusVooEnum status, @PathVariable String id) {
+        return vooService.updateStatusVoo(status,id);
     }
     @DeleteMapping(value = "/delete/{id}", produces= MediaType.APPLICATION_JSON_VALUE)
     public void deleteVoo(@PathVariable String id) {
