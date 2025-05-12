@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "voos")
@@ -26,6 +28,8 @@ public class VooModel {
     @NotBlank
     private String dataHoraPartida;
     @NotNull
+    @DBRef
+    @Indexed(unique = true)
     private PortaoModel portaoId;
     @NotNull
     private StatusVooEnum statusVoo;

@@ -1,6 +1,7 @@
 package com.softwaremobi.gerenciamentodevoos.services;
 
 import com.softwaremobi.gerenciamentodevoos.Enum.StatusVooEnum;
+import com.softwaremobi.gerenciamentodevoos.Models.PortaoModel;
 import com.softwaremobi.gerenciamentodevoos.Models.VooModel;
 import com.softwaremobi.gerenciamentodevoos.repositories.PortaoRepository;
 import com.softwaremobi.gerenciamentodevoos.repositories.VooRepository;
@@ -21,9 +22,24 @@ public class VooService {
         return vooRepository.findAll();
     }
     public VooModel createVoo(VooModel voo) {
-        return vooRepository.save(voo);
+        if(voo.getPortaoId().isDisponivel()){
+            PortaoModel portao = portaoRepository.findById(voo.getPortaoId().getId()).orElse(null);
+            if (portao != null) {
+                portao.setDisponivel(false);
+                portaoRepository.save(portao);
+            }
+            return vooRepository.save(voo);
+        }
+        return null;
     }
     public VooModel updateStatusVoo(StatusVooEnum status,String id) {
+        if(status.equals(StatusVooEnum.CONCLUIDO)){
+            PortaoModel portao = portaoRepository.findById(vooRepository.findById(id).orElse(null).getPortaoId().getId()).orElse(null);
+            if (portao != null) {
+                portao.setDisponivel(true);
+                portaoRepository.save(portao);
+            }
+        }
         VooModel voo = vooRepository.findById(id).orElse(null);
         if (voo != null) {
             voo.setStatusVoo(status);
